@@ -1,0 +1,29 @@
+body {
+    background-color: #fff8f0;
+    font-family: Georgia, serif;
+    margin: 20px;
+  }
+  
+  h1 {
+    color: #8a2be2;
+    font-size: 38px;
+  }
+  
+  p {
+    color: #333;
+    line-height: 1.5;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #e67300;
+  }
+  

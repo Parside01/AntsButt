@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кликабельная плоскость</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { border: 1px solid black; cursor: crosshair; }
+    </style>
+</head>
+<body>
+    <h2>Кликайте по плоскости, чтобы поставить точки</h2>
+
+    <label>Количество кластеров:</label>
+    <input type="number" id="clusters" min="1" value="2">
+    <button id="clusterBtn">Начать кластеризацию</button>
+    <button id="resetBtn">Сбросить</button>
+
+    <br><br>
+    <canvas id="canvas" width="600" height="600"></canvas>
+
+    <script src="claster.js"></script>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let points = [];
+
+        const COLORS = ["red", "green", "blue", "orange", "purple", "cyan", "magenta", "yellow", "gray", "brown"];
+
+        canvas.addEventListener("click", function(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            points.push({x, y});
+            drawPoint(x, y);
+        });
+
+        function drawPoint(x, y, color = "black") {
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function prepareDataset(points) {
+            return points.map(p => [p.x, p.y]);
+        }
+
+        function drawClusters(clusters) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            clusters.forEach((cluster, i) => {
+                const color = COLORS[i % COLORS.length];
+                cluster.points.forEach(p => {
+                    drawPoint(p[0], p[1], color);
+                });
+
+                const [cx, cy] = cluster.centroid;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+                ctx.closePath();
+            });
+        }
+
+        document.getElementById("clusterBtn").addEventListener("click", function() {
+            const k = parseInt(document.getElementById("clusters").value);
+            if (points.length < k) {
+                alert("Слишком мало точек для такого количества кластеров.");
+                return;
+            }
+
+            const dataset = prepareDataset(points);
+            const result = kmeans(dataset, k, true);
+            drawClusters(result.clusters);
+        });
+
+        document.getElementById("resetBtn").addEventListener("click", function() {
+            points = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+    </script>
+</body>
+</html>
