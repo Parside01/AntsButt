@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Угадайка</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        canvas {
+            border: 1px solid black;
+            width: 280px;
+            height: 280px;
+        }
+    </style>
+
+</head>
+<body>
+<canvas id="canvas" width="280" height="280" style="width: 280px; height: 280px;"></canvas>
+<button id="sendButton">Иии крутить барабан</button>
+<script>
+    $(document).ready(function () {
+        const canvas = $('#canvas')[0];
+        const context = canvas.getContext('2d');
+
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        let painting = false;
+
+        $('#canvas').on('mousedown', startPosition);
+        $('#canvas').on('mouseup', endPosition);
+        $('#canvas').on('mousemove', draw);
+
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+        }
+
+        function endPosition() {
+            painting = false;
+            context.beginPath();
+        }
+
+        function draw(e) {
+            if (!painting) return;
+
+            context.lineWidth = 20;
+            context.lineCap = 'round';
+            context.strokeStyle = 'black';
+
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+
+            context.lineTo(x, y);
+            context.stroke();
+            context.beginPath();
+            context.moveTo(x, y);
+        }
+
+
+        $('#sendButton').on('click', sendData);
+
+        function sendData() {
+            const tempCanvas = document.createElement('canvas');
+
+            document.body.appendChild(tempCanvas);
+            tempCanvas.width = 28;
+            tempCanvas.height = 28;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            tempCtx.drawImage(canvas, 0, 0, 28, 28);
+
+            const imageData = tempCtx.getImageData(0, 0, 28, 28);
+            const pixels = [];
+
+            let grayscaleSum = 0;
+            let pixelCount = 0;
+
+            let hasNonZero = false;
+
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                const r = imageData.data[i];
+                const g = imageData.data[i + 1];
+                const b = imageData.data[i + 2];
+                const alpha = imageData.data[i + 3];
+
+                if (alpha === 0) continue;
+
+                const grayscale = 255 - (0.299 * r + 0.587 * g + 0.114 * b);
+                const normalized = grayscale / 255;
+
+                pixels.push(normalized);
+                grayscaleSum += normalized;
+                pixelCount++;
+
+                if (normalized > 0.1) hasNonZero = true;
+            }
+
+            if (!hasNonZero) {
+                alert('Нарисуйте цифру перед отправкой!');
+                return;
+            }
+
+            const meanGrayscale = grayscaleSum / pixelCount;
+            if (meanGrayscale > 0.5) {
+                for (let i = 0; i < pixels.length; i++) {
+                    pixels[i] = 1 - pixels[i];
+                }
+            }
+            $.ajax({
+                url: 'http://localhost:8080/pred',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({pixels}),
+                success: function (data) {
+                    console.log('Пришло:', data);
+                },
+                error: function (error) {
+                    console.error('Ошибка:', error);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

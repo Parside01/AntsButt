@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ants Butt ept</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      .container {
+        gap: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .cells-wrapper {
+        display: grid;
+        grid-template-columns: repeat(25, 26px);
+        grid-template-rows: repeat(25, 26px);
+        padding: 15px;
+        width: auto;
+        height: auto;
+      }
+
+      .cell {
+        border: 1px solid #6f6f6f99;
+        transition: background-color 0.3s ease;
+        width: 30px;
+        height: 30px;
+      }
+
+      .cell.cell--selected {
+        background-color: black;
+      }
+
+      .cell.cell--path {
+        background-color: red;
+      }
+
+      .cell--path-found {
+        background-color: green;
+      }
+
+      .cell--review {
+        background-color: yellow;
+      }
+
+      .cell--dead {
+        position: relative;
+      }
+
+      .cell--dead::before {
+        content: "✖";
+        color: black;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+
+    <div class="container">
+      <input value="" type="number" id="cell-count" class="form-control" />
+      <div class="cells-wrapper"></div>
+      <button id="find-path" class="btn">Найти путь</button>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+
+        let cellCount = 51;
+
+        function IsValidCellCoords(x, y) {
+          return x >= 0 && x < cellCount && y >= 0 && y < cellCount;
+        }
+
+        function GetCellKey(x, y) {
+          return `${x},${y}`;
+        }
+
+        const unionFind = {
+          parents: {},
+
+          findRepresentative(x, y) {
+            const key = GetCellKey(x, y);
+
+            if (!this.parents[key]) {
+              return null;
+            }
+
+            if (this.parents[key] != key) {
+              const [parentX, parentY] = this.parents[key]
+                .split(",")
+                .map(Number);
+              this.parents[key] = this.findRepresentative(parentX, parentY);
+            }
+            return this.parents[key];
+          },
+
+          unite(ax, ay, bx, by) {
+            const aRep = this.findRepresentative(ax, ay);
+            const bRep = this.findRepresentative(bx, by);
+            this.parents[aRep] = bRep;
+          },
+        };
+
+        function SetCellSize() {
+          const wrapperWidth = $(".cells-wrapper").width();
+          const wrapperHeight = $(".cells-wrapper").height();
+          const cellSize = Math.min(
+            wrapperWidth / cellCount,
+            wrapperHeight / cellCount
+          );
+
+          $(".cells-wrapper").css({
+            "grid-template-columns": `repeat(${cellCount}, ${cellSize}px)`,
+            "grid-template-rows": `repeat(${cellCount}, ${cellSize}px)`,
+          });
+          $(".cell").css({
+            width: `${cellSize}px`,
+            height: `${cellSize}px`,
+          });
+        }
+
+        function GetRandomCell() {
+          const max = Math.floor((cellCount - 1) / 2);
+          const x = Math.floor(Math.random() * (max + 1)) * 2;
+          const y = Math.floor(Math.random() * (max + 1)) * 2;
+          return $(`.cell[x="${x}"][y="${y}"]`);
+        }
+
+        function GetRandomDir() {
+          const bias = 0.58;
+          const rand = Math.random();
+          if (rand < bias) {
+            return Math.random() < 0.5 ? { x: -1, y: 0 } : { x: 1, y: 0 };
+          } else {
+            return Math.random() < 0.5 ? { x: 0, y: -1 } : { x: 0, y: 1 };
+          }
+        }
+
+        function IterateKruskal() {
+          let attempts = 0;
+          const maxAttempts = 20;
+          while (attempts++ < maxAttempts) {
+            const cellA = GetRandomCell();
+            if (!cellA.length) continue;
+
+            const dir = GetRandomDir();
+            const ax = parseInt(cellA.attr("x"));
+            const ay = parseInt(cellA.attr("y"));
+
+            const wx = ax + dir.x;
+            const wy = ay + dir.y;
+
+            const bx = ax + dir.x * 2;
+            const by = ay + dir.y * 2;
+
+            if (
+              !IsValidCellCoords(ax, ay) ||
+              !IsValidCellCoords(wx, wy) ||
+              !IsValidCellCoords(bx, by)
+            )
+              continue;
+
+            const wall = $(`.cell[x="${wx}"][y="${wy}"]`);
+            const neighborCell = $(`.cell[x="${bx}"][y="${by}"]`);
+
+            if (!wall.length || !neighborCell.length) continue;
+            if (!wall.hasClass("cell--selected")) continue;
+
+            if (
+              unionFind.findRepresentative(ax, ay) ===
+              unionFind.findRepresentative(bx, by)
+            )
+              continue;
+
+            wall.removeClass("cell--selected");
+            unionFind.unite(ax, ay, bx, by);
+            return;
+          }
+        }
+
+        function GenerateMaze() {
+          unionFind.parents = {};
+          for (let x = 0; x < cellCount; x++) {
+            for (let y = 0; y < cellCount; y++) {
+              const key = GetCellKey(x, y);
+              unionFind.parents[key] = key;
+            }
+          }
+
+          const iterNum = ((cellCount - 1) * (cellCount + 3)) / 4;
+          for (let i = 0; i < iterNum; ++i) {
+            IterateKruskal();
+          }
+        }
+
+        function GenerateCell() {
+          $(".cell").remove();
+
+          for (let x = 0; x < cellCount; x++) {
+            for (let y = 0; y < cellCount; y++) {
+              let cell = $(`<div class="cell" x=${x} y=${y}></div>`);
+              if (x % 2 === 1 || y % 2 === 1) {
+                cell.addClass("cell--selected");
+              }
+              $(".cells-wrapper").append(cell);
+            }
+          }
+
+          GenerateMaze();
+          SetCellSize();
+        }
+
+        GenerateCell();
+
+        function sleep(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        function SetCellSize() {
+          const wrapperWidth = $(".cells-wrapper").width();
+          const wrapperHeight = $(".cells-wrapper").height();
+
+          const cellSize = Math.min(
+            wrapperWidth / cellCount,
+            wrapperHeight / cellCount
+          );
+
+          $(".cells-wrapper").css({
+            "grid-template-columns": `repeat(${cellCount}, ${cellSize}px)`,
+            "grid-template-rows": `repeat(${cellCount}, ${cellSize}px)`,
+          });
+          $(".cell").css({
+            width: `${cellSize}px`,
+            height: `${cellSize}px`,
+          });
+        }
+
+        function SelectCell(cell) {
+          cell.toggleClass("cell--selected");
+        }
+
+        function UnselectedCell(cell) {
+          cell.removeClass("cell--selected");
+        }
+
+        function AddPathCell(cell) {
+          cell.removeClass("cell--selected");
+          $(".cell").removeClass("cell--path-found");
+
+          if (cell.hasClass("cell--path")) {
+            cell.removeClass("cell--path");
+            return;
+          }
+
+          const pathCells = $(".cell--path");
+
+          if (pathCells.length >= 2) {
+            const oldestCell = pathCells.first();
+            oldestCell.removeClass("cell--path");
+          }
+
+          cell.addClass("cell--path");
+          const updatedPathCells = $(".cell--path");
+        }
+
+        $(document).on("click", ".cell", function (event) {
+          if ($(this).hasClass("cell--selected")) {
+            UnselectedCell($(this));
+          } else {
+            SelectCell($(this));
+          }
+        });
+
+        $(document).on("contextmenu", ".cell", function (event) {
+          event.preventDefault();
+          AddPathCell($(this));
+        });
+
+        $(window).resize(function () {
+          SetCellSize();
+        });
+
+        $(document).keydown(function (event) {
+          if (event.key === "Enter") {
+            cellCount = $("#cell-count").val();
+            GenerateCell();
+          }
+        });
+
+        async function FindPath(startX, startY, endX, endY) {
+          $(".cell").removeClass("cell--dead");
+          const queue = [];
+          const visitied = new Set();
+
+          const startNode = {
+            x: startX,
+            y: startY,
+            distance: 0,
+            value: 0,
+            heuristics: Math.abs(startX - endX) + Math.abs(startY - endY),
+            parent: null,
+          };
+          startNode.value = startNode.distance + startNode.heuristics;
+          queue.push(startNode);
+
+          let prevCell = null;
+          while (queue.length > 0) {
+            $(".cell").removeClass("cell--review");
+
+            queue.sort((a, b) => b.value - a.value);
+            const currentCell = queue.pop();
+            visitied.add(GetCellKey(currentCell.x, currentCell.y));
+
+            $(`.cell[x="${currentCell.x}"][y="${currentCell.y}"]`).addClass(
+              "cell--review"
+            );
+
+            if (
+              prevCell &&
+              (prevCell.x - currentCell.x > 1 || prevCell.y - currentCell.y > 1)
+            ) {
+              $(`.cell[x="${prevCell.x}"][y="${prevCell.y}"]`).addClass(
+                "cell--dead"
+              );
+            }
+
+            if (currentCell.x === endX && currentCell.y === endY) {
+              const path = [];
+              let current = currentCell;
+              while (current !== null) {
+                path.push({ x: current.x, y: current.y });
+                current = current.parent;
+              }
+              return path.reverse();
+            }
+
+            const directions = [
+              { dx: 1, dy: 0 },
+              { dx: -1, dy: 0 },
+              { dx: 0, dy: 1 },
+              { dx: 0, dy: -1 },
+            ];
+
+            for (const dir of directions) {
+              const x = currentCell.x + dir.dx;
+              const y = currentCell.y + dir.dy;
+
+              if (!IsValidCellCoords(x, y)) continue;
+
+              const cell = $(`.cell[x="${x}"][y="${y}"]`);
+              if (!cell || cell.hasClass("cell--selected")) continue;
+
+              if (visitied.has(GetCellKey(x, y))) continue;
+
+              const newDistance = currentCell.distance + 1;
+              const newHeuristics = Math.abs(x - endX) + Math.abs(y - endY);
+              const nextCell = {
+                x,
+                y,
+                distance: newDistance,
+                heuristics: newHeuristics,
+                value: newDistance + newHeuristics,
+                parent: currentCell,
+              };
+
+              const existingCell = queue.find((n) => n.x === x && n.y === y);
+              if (existingCell) {
+                continue;
+              }
+              queue.push(nextCell);
+            }
+            prevCell = currentCell;
+            await sleep(100);
+          }
+
+          return null;
+        }
+
+        async function FindAndDrawPath() {
+          $(".cell--path-found").removeClass("cell--path-found");
+          const pathCells = $(".cell--path");
+          if (pathCells.length !== 2) {
+            alert("Выберите 2 клетки для маршрута!");
+            return;
+          }
+
+          const start = {
+            x: parseInt(pathCells.eq(0).attr("x")),
+            y: parseInt(pathCells.eq(0).attr("y")),
+          };
+          const end = {
+            x: parseInt(pathCells.eq(1).attr("x")),
+            y: parseInt(pathCells.eq(1).attr("y")),
+          };
+
+          const path = await FindPath(start.x, start.y, end.x, end.y);
+          if (path) {
+            path.forEach((point) => {
+              const cell = $(`.cell[x="${point.x}"][y="${point.y}"]`);
+              if (!cell.hasClass("cell--path")) {
+                cell.removeClass("cell--dead cell--review");
+                cell.addClass("cell--path-found");
+              }
+            });
+          } else {
+            alert("Не получилось найти путь!");
+          }
+        }
+        $("#find-path").click(FindAndDrawPath);
+      });
+    </script>
+
+    <script></script>
+  </body>
+</html>
