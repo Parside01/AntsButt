@@ -62,9 +62,6 @@ int main() {
             expected[train_labels[i]] = 1.0;
 
             Network::BackwardFeed(expected);
-            // if (i % 1000 == 0) {
-            //     std::cout << "Pred " << pred << " " << "Expect " << train_labels[i] << std::endl;
-            // }
 
             for (uint32_t layer = 0; layer < Network::LayersCount - 1; ++layer) {
                 Network::LayersWeights[layer] -= learningRate *
@@ -95,10 +92,19 @@ int main() {
     }
 
 
-    std::ofstream weights_file("network_weights.txt");
+    std::ofstream weightsFile("network_weights.txt");
     for (size_t i = 0; i < Network::LayersWeights.size(); ++i) {
-        weights_file << Network::LayersWeights[i] << "\n";
-        weights_file << Network::LayersBiases[i] << "\n";
+        for (int j = 0; j < Network::LayersWeights[i].rows(); ++j) {
+            for (int k = 0; k < Network::LayersWeights[i].cols(); ++k) {
+                weightsFile << Network::LayersWeights[i](j, k) << " ";
+            }
+        }
+        weightsFile << "\n";
+
+        for (int j = 0; j < Network::LayersBiases[i].size(); ++j) {
+            weightsFile << Network::LayersBiases[i](j) << " ";
+        }
+        weightsFile << "\n";
     }
 
     while (true) {
@@ -121,5 +127,4 @@ int main() {
         uint32_t pred = Network::ForwardFeed();
         std::cout << "Pred: " << pred << std::endl;
     }
-    return 0;
 }

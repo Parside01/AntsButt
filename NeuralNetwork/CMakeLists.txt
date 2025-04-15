@@ -12,7 +12,7 @@ add_library(neural_lib
 target_link_libraries(neural_lib Eigen3::Eigen)
 
 
-add_executable(${PROJECT_NAME} main-nn.cpp)
+#add_executable(${PROJECT_NAME} main-nn.cpp)
 #add_executable(${PROJECT_NAME} main-learn-cli.cpp)
-#add_executable(${PROJECT_NAME} main-cli.cpp)
+add_executable(${PROJECT_NAME} main-cli.cpp)
 target_link_libraries(${PROJECT_NAME} neural_lib)

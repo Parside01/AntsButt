@@ -72,11 +72,9 @@ func readWeightsFromFile(filename string) ([]float64, error) {
 			weights = append(weights, num)
 		}
 	}
-
 	if err := scanner.Err(); err != nil {
 		return nil, err
 	}
-
 	return weights, nil
 }
 
@@ -100,10 +98,9 @@ func servicePredHandler(w http.ResponseWriter, r *http.Request) {
 
 	var stdinData strings.Builder
 	stdinData.WriteString(weightsStdin.String())
-	for i, pixel := range in.Pixels {
+	for _, pixel := range in.Pixels {
 		stdinData.WriteString(fmt.Sprintf("%f\n", pixel))
 	}
-// 	stdinData.WriteString(fmt.Sprintf("%d\n", in.Expect))
 
 	cmd := exec.Command(neuralNetworkExecutable)
 
@@ -176,7 +173,6 @@ func servicePredHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Error encoding and writing response JSON: %v", err)
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func serviceLearnHandler(w http.ResponseWriter, r *http.Request) {

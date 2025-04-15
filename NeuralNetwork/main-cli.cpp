@@ -10,7 +10,6 @@ int main(int argc, char **argv) {
     Network::InitWidthFromInput(property);
 
     Eigen::VectorXd input(property.NeuronsCount[0]);
-    std::cerr << "Reading " << property.NeuronsCount[0] << " pixel values from stdin..." << std::endl;
 
     for (int i = 0; i < property.NeuronsCount[0]; ++i) {
         double temp;
@@ -20,7 +19,6 @@ int main(int argc, char **argv) {
         }
         input(i) = temp;
     }
-    std::cerr << "Finished reading pixel values." << std::endl;
 
     Network::NeuronsValues[0] = input;
 

@@ -127,14 +127,29 @@ void Network::InitWidthFromInput(const NetworkProperty& prop) {
     NeuronsValues.clear();
     NeuronsErrors.clear();
 
-    size_t expected_count = 0;
-    for (uint32_t i = 0; i < LayersCount - 1; ++i) {
-        expected_count += NeuronsCount[i + 1] * NeuronsCount[i];
-        expected_count += NeuronsCount[i + 1];
-    }
+    size_t expectedCount = 0;
+    for (uint32_t layer = 0; layer < LayersCount - 1; ++layer) {
+        const uint32_t rows = NeuronsCount[layer + 1];
+        const uint32_t cols = NeuronsCount[layer];
 
-    std::vector<double> allNumbers(expected_count);
-    for (size_t i = 0; i < expected_count; ++i) {
+        for (uint32_t i = 0; i < rows; ++i) {
+            for (uint32_t j = 0; j < cols; ++j) {
+                expectedCount++;
+            }
+        }
+
+        Eigen::VectorXd biases(rows);
+        for (uint32_t i = 0; i < rows; ++i) {
+            expectedCount++;
+        }
+    }
+    // for (uint32_t i = 0; i < LayersCount - 1; ++i) {
+    //     expectedCount += NeuronsCount[i + 1] * NeuronsCount[i];
+    //     expectedCount += NeuronsCount[i + 1];
+    // }
+
+    std::vector<double> allNumbers(expectedCount);
+    for (size_t i = 0; i < expectedCount; ++i) {
         if (!(std::cin >> allNumbers[i])) {
             throw std::runtime_error("Error reading input");
         }
