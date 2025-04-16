@@ -20,7 +20,7 @@
 <ul class="course__list dark-theme">
     <li class="course__item course-card">
         <div class="course-card__content">
-            <div class="course-card__info">
+            <a class="course-card__info" href="Documents/AAlg.html">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Поиск пути в лабиринте</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -33,7 +33,7 @@
                 <button class="bttn bttn-prime">
                     Перейти
                 </button>
-            </div>
+            </a>
             <div class="course-card__card" style="width: 150px">
                 <img class="course-card__card-img"
                      src="Documents/Icons/maze.jpg">
@@ -42,7 +42,7 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <div class="course-card__info">
+            <a class="course-card__info">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Кластеризация</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -55,7 +55,7 @@
                 <button class="bttn bttn-prime">
                     Перейти
                 </button>
-            </div>
+            </a>
             <div class="course-card__card">
                 <img class="course-card__card-img" height="100%"
                      src="Documents/Icons/cluster.jpg">
@@ -64,7 +64,7 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <div class="course-card__info">
+            <a class="course-card__info">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Генетический алгоритм</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -78,7 +78,7 @@
                 <button class="bttn bttn-prime">
                     Перейти
                 </button>
-            </div>
+            </a>
             <div class="course-card__card">
                 <img class="course-card__card-img" height="100%"
                      src="Documents/Icons/genetic.jpg">
@@ -87,7 +87,7 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <div class="course-card__info">
+            <a class="course-card__info">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Дерево решений</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -100,7 +100,7 @@
                 <button class="bttn bttn-prime">
                     Перейти
                 </button>
-            </div>
+            </a>
             <div class="course-card__card">
                 <img class="course-card__card-img" height="100%"
                      src="Documents/Icons/tree.jpg">
@@ -109,9 +109,9 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <a class="course-card__info" href="Documents/AAlg.html">
+            <a class="course-card__info">
                 <div class="course-card__info--line">
-                    <h5 class="course-card__title">Поиск пути в лабиринте</h5>
+                    <h5 class="course-card__title">Муравьиный алгоритм</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                          viewBox="0 0 24 24" fill="none">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -131,7 +131,7 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <div class="course-card__info">
+            <a class="course-card__info" href="Documents/NeuralNetwork.html">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Нейронная сеть 😎</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -141,11 +141,12 @@
                               fill="#8B8B8B"></path>
                     </svg>
                 </div>
-                <p class="course-card__catalog" style="margin-bottom: 5px">Генератор случайных чисел? Неа, правда что-то угадывает</p>
+                <p class="course-card__catalog" style="margin-bottom: 5px">Генератор случайных чисел? Неа, правда что-то
+                    угадывает</p>
                 <button class="bttn bttn-prime">
                     Перейти
                 </button>
-            </div>
+            </a>
             <div class="course-card__card">
                 <img class="course-card__card-img" style="margin-top:10px"
                      src="Documents/Icons/neural.jpg">
@@ -172,6 +173,10 @@
     *, ::after, ::before {
         box-sizing: border-box;
         font-weight: 700 !important;
+    }
+
+    a {
+        text-decoration: none;
     }
 
     body {

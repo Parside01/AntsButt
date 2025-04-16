@@ -1,4 +1,10 @@
 .PHONY: run-go-cli
-run-go-cli:
+build-run:
+	mkdir cmake-build-release
+	cd cmake-build-release && cmake .. -G Ninja
+	cd ..
+	cmake --build cmake-build-release --target neural_network -j 6
 	go run third_party/go-cli/main.go
-default: run-go-cli
+run:
+	go run third_party/go-cli/main.go
+default: build-run

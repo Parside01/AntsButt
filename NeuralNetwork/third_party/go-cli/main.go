@@ -198,7 +198,7 @@ func serviceLearnHandler(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < 28; i++ {
 		var lineBuilder strings.Builder
 		for j := 0; j < 28; j++ {
-			lineBuilder.WriteString(fmt.Sprintf("%d ", int32(in.Pixels[i*28+j])))
+			lineBuilder.WriteString(fmt.Sprintf("%f ", in.Pixels[i*28+j]))
 		}
 		lineBuilder.WriteString("\n")
 		if _, err = file.WriteString(lineBuilder.String()); err != nil {
@@ -218,7 +218,7 @@ func main() {
 	}
 	http.HandleFunc("/pred", corsDisableMiddleware(servicePredHandler))
 	http.HandleFunc("/learn", corsDisableMiddleware(serviceLearnHandler))
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":8081", nil); err != nil {
 		slog.Error("Error starting server: %s", err.Error())
 	}
 }
