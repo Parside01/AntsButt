@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Ants Butt ept</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
     <style>
         :root {
             --dark-background: #121212;
@@ -13,7 +16,7 @@
             --dark-button-text: #212121;
             --yellow-shadow: rgba(255, 235, 59, 0.2);
             --yellow-button-background: #ffeb3b;
-            --maze-background: #333;
+            --maze-background: #464646;
             --maze-wall: #1e1e1e;
             --maze-path: #00bcd4;
             --maze-found: #ffffff;
@@ -74,7 +77,7 @@
             background-color: var(--maze-background);
         }
 
-        .cell.cell--selected {
+        .cell.cell--wall {
             background-color: var(--maze-wall);
         }
 
@@ -116,7 +119,12 @@
             -moz-appearance: textfield;
         }
 
-        .btn {
+        .cell--temp {
+            border-color: var(--maze-review);
+            border: solid 1px var(--maze-review);
+        }
+
+        .bttn {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -134,13 +142,27 @@
             width: auto;
         }
 
-        .btn.disable {
+        .bttn.disable {
             background-color: var(--yellow-shadow);
             border-color: var(--yellow-shadow);
         }
 
-        .btn:hover {
-            opacity: 0.9;
+        .bttn {
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .bttn:hover {
+            transform: scale(0.95);
+        }
+
+        .bttn:active {
+            transform: scale(0.9);
+        }
+
+        .bttn.disable {
+            background-color: var(--yellow-shadow);
+            border-color: var(--yellow-shadow);
+            color: var(--dark-button-text);
         }
     </style>
 </head>
@@ -148,7 +170,7 @@
 <div class="container">
     <div class="controls">
         <input value="" type="number" id="cell-count" class="form-control" placeholder="Размер"/>
-        <button id="find-path" class="btn">Найти</button>
+        <button id="find-path" class="bttn">Найти</button>
     </div>
     <div class="cells-wrapper"></div>
 </div>
@@ -157,7 +179,7 @@
 <script>
     $(document).ready(function () {
 
-        let cellCount = 51;
+        let cellCount = 25;
 
         function IsValidCellCoords(x, y) {
             return x >= 0 && x < cellCount && y >= 0 && y < cellCount;
@@ -193,7 +215,7 @@
             },
         };
 
-        function SetCellSize() {
+        async function SetCellSize() {
             const wrapperWidth = $(".cells-wrapper").width();
             const wrapperHeight = $(".cells-wrapper").height();
             const cellSize = Math.min(
@@ -219,7 +241,7 @@
         }
 
         function GetRandomDir() {
-            const bias = 0.58;
+            const bias = 0.5;
             const rand = Math.random();
             if (rand < bias) {
                 return Math.random() < 0.5 ? {x: -1, y: 0} : {x: 1, y: 0};
@@ -228,9 +250,9 @@
             }
         }
 
-        function IterateKruskal() {
+        async function IterateKruskal() {
             let attempts = 0;
-            const maxAttempts = 20;
+            const maxAttempts = 101;
             while (attempts++ < maxAttempts) {
                 const cellA = GetRandomCell();
                 if (!cellA.length) continue;
@@ -256,7 +278,7 @@
                 const neighborCell = $(`.cell[x="${bx}"][y="${by}"]`);
 
                 if (!wall.length || !neighborCell.length) continue;
-                if (!wall.hasClass("cell--selected")) continue;
+                if (!wall.hasClass("cell--wall")) continue;
 
                 if (
                     unionFind.findRepresentative(ax, ay) ===
@@ -264,13 +286,13 @@
                 )
                     continue;
 
-                wall.removeClass("cell--selected");
+                wall.removeClass("cell--wall");
                 unionFind.unite(ax, ay, bx, by);
                 return;
             }
         }
 
-        function GenerateMaze() {
+        async function GenerateMaze() {
             unionFind.parents = {};
             for (let x = 0; x < cellCount; x++) {
                 for (let y = 0; y < cellCount; y++) {
@@ -279,27 +301,30 @@
                 }
             }
 
-            const iterNum = ((cellCount - 1) * (cellCount + 3)) / 4;
+            const iterNum = ((Number(cellCount) - 1) * (Number(cellCount) + 3)) / 4;
             for (let i = 0; i < iterNum; ++i) {
-                IterateKruskal();
+                await IterateKruskal();
+                await sleep(1);
             }
         }
 
-        function GenerateCell() {
+        async function GenerateCell() {
             $(".cell").remove();
 
             for (let x = 0; x < cellCount; x++) {
                 for (let y = 0; y < cellCount; y++) {
                     let cell = $(`<div class="cell" x=${x} y=${y}></div>`);
                     if (x % 2 === 1 || y % 2 === 1) {
-                        cell.addClass("cell--selected");
+                        cell.addClass("cell--wall");
                     }
                     $(".cells-wrapper").append(cell);
                 }
             }
 
-            GenerateMaze();
-            SetCellSize();
+            $("#find-path").addClass("disable");
+            await SetCellSize();
+            await GenerateMaze();
+            $("#find-path").removeClass("disable");
         }
 
         GenerateCell();
@@ -308,35 +333,20 @@
             return new Promise((resolve) => setTimeout(resolve, ms));
         }
 
-        function SetCellSize() {
-            const wrapperWidth = $(".cells-wrapper").width();
-            const wrapperHeight = $(".cells-wrapper").height();
-
-            const cellSize = Math.min(
-                wrapperWidth / cellCount,
-                wrapperHeight / cellCount
-            );
-
-            $(".cells-wrapper").css({
-                "grid-template-columns": `repeat(${cellCount}, ${cellSize}px)`,
-                "grid-template-rows": `repeat(${cellCount}, ${cellSize}px)`,
-            });
-            $(".cell").css({
-                width: `${cellSize}px`,
-                height: `${cellSize}px`,
-            });
-        }
-
         function SelectCell(cell) {
-            cell.toggleClass("cell--selected");
+            cell.removeClass();
+            cell.addClass("cell cell--wall");
         }
 
         function UnselectedCell(cell) {
-            cell.removeClass("cell--selected");
+            cell.removeClass("cell--wall");
+            if (!cell.hasClass("cell")) {
+                cell.addClass("cell");
+            }
         }
 
         function AddPathCell(cell) {
-            cell.removeClass("cell--selected");
+            cell.removeClass("cell--wall");
             $(".cell").removeClass("cell--path-found");
 
             if (cell.hasClass("cell--path")) {
@@ -347,8 +357,9 @@
             const pathCells = $(".cell--path");
 
             if (pathCells.length >= 2) {
-                const oldestCell = pathCells.first();
-                oldestCell.removeClass("cell--path");
+                return;
+                // const oldestCell = pathCells.first();
+                // oldestCell.removeClass("cell--path");
             }
 
             cell.addClass("cell--path");
@@ -356,8 +367,8 @@
         }
 
         $(document).on("click", ".cell", function (event) {
-            if ($(this.hasClass("cell--path"))) return;
-            if ($(this).hasClass("cell--selected")) {
+            if ($(this).hasClass("cell--path"))return;
+            if ($(this).hasClass("cell--wall")) {
                 UnselectedCell($(this));
             } else {
                 SelectCell($(this));
@@ -373,11 +384,11 @@
             SetCellSize();
         });
 
-        $(document).keydown(function (event) {
+        $(document).keydown(async function (event) {
             if (event.key === "Enter") {
                 if ($("#find-path").hasClass("disable")) return;
-                cellCount = $("#cell-count").val();
-                GenerateCell();
+                cellCount = Number($("#cell-count").val());
+                await GenerateCell();
             }
         });
 
@@ -433,6 +444,20 @@
                     {dx: 0, dy: 1},
                     {dx: 0, dy: -1},
                 ];
+                for (const dir of directions) {
+                    const x = currentCell.x + dir.dx;
+                    const y = currentCell.y + dir.dy;
+
+                    if (!IsValidCellCoords(x, y)) continue;
+
+                    const cell = $(`.cell[x="${x}"][y="${y}"]`);
+                    if (!cell || cell.hasClass("cell--wall")) continue;
+
+                    if (visited.has(GetCellKey(x, y))) continue;
+                    
+                    cell.addClass("cell--temp");
+                    console.log(cell)
+                }
 
                 for (const dir of directions) {
                     const x = currentCell.x + dir.dx;
@@ -441,7 +466,7 @@
                     if (!IsValidCellCoords(x, y)) continue;
 
                     const cell = $(`.cell[x="${x}"][y="${y}"]`);
-                    if (!cell || cell.hasClass("cell--selected")) continue;
+                    if (!cell || cell.hasClass("cell--wall")) continue;
 
                     if (visited.has(GetCellKey(x, y))) continue;
 
@@ -462,6 +487,7 @@
                 }
                 prevCell = currentCell;
                 await sleep(100);
+                $(".cell").removeClass("cell--temp")
             }
 
             return null;
@@ -473,6 +499,7 @@
             const pathCells = $(".cell--path");
             if (pathCells.length !== 2) {
                 alert("Выберите 2 клетки для маршрута!");
+                $("#find-path").removeClass("disable");
                 return;
             }
 

@@ -22,7 +22,7 @@
         <div class="course-card__content">
             <a class="course-card__info" href="Documents/AAlg.html">
                 <div class="course-card__info--line">
-                    <h5 class="course-card__title">Поиск пути в лабиринте</h5>
+                    <h5 class="course-card__title">Поиск пути в лабиринте 😶‍🌫️</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                          viewBox="0 0 24 24" fill="none">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -30,6 +30,7 @@
                               fill="#8B8B8B"></path>
                     </svg>
                 </div>
+                <p class="course-card__catalog" style="margin-bottom: 5px">Это мог быть пакмен но имеем что имеем</p>
                 <button class="bttn bttn-prime">
                     Перейти
                 </button>
@@ -42,7 +43,7 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <a class="course-card__info">
+            <a class="course-card__info" href="">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Кластеризация</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -64,7 +65,7 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <a class="course-card__info">
+            <a class="course-card__info" href="Documents/Genetic.html">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Генетический алгоритм</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -87,7 +88,7 @@
     </li>
     <li class="course__item course-card">
         <div class="course-card__content">
-            <a class="course-card__info">
+            <a class="course-card__info" href="Documents/DecTree.html">
                 <div class="course-card__info--line">
                     <h5 class="course-card__title">Дерево решений</h5>
                     <svg class="animat-cursor" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -199,7 +200,8 @@
     .dark-theme {
         margin-left: 200px;
         margin-right: 200px;
-        margin-top: 100px;
+        margin-top: 50px;
+        margin-bottom: 50px;
         list-style: none;
         display: grid;
         padding-left: 0;
@@ -287,8 +289,7 @@
         color: var(--dark-button-text);
     }
 
-
-    .dark-theme .bttn {
+    .bttn {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -298,6 +299,18 @@
         border-radius: 12px;
         font-size: 16px;
         line-height: 1.5em;
+    }
+
+    .bttn {
+        transition: transform 0.1s ease-in-out;
+    }
+
+    .bttn:hover {
+        transform: scale(0.95);
+    }
+
+    .bttn:active {
+        transform: scale(0.9);
     }
 
     .bttn.disable {
@@ -311,6 +324,10 @@
         display: block;
         width: 100%;
         filter: brightness(80%);
+    }
+
+    a {
+        text-decoration: none;
     }
 </style>
 
