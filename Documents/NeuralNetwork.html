@@ -271,7 +271,7 @@
         function draw(e) {
             if (!painting) return;
 
-            context.lineWidth = 30;
+            context.lineWidth = 35;
             context.lineCap = 'round';
             context.strokeStyle = 'black';
 
@@ -293,11 +293,10 @@
 
         function sendData() {
             $('#prediction').text("");
-            // const predictionModal = new bootstrap.Modal($('#predictionModal'));
-            // predictionModal.show();
+            const predictionModal = new bootstrap.Modal($('#predictionModal'));
+            predictionModal.show();
 
             const tempCanvas = document.createElement('canvas');
-            $("body").append(tempCanvas);
             tempCanvas.width = 28;
             tempCanvas.height = 28;
             const tempCtx = tempCanvas.getContext('2d');
@@ -342,7 +341,7 @@
                 }
             }
             $.ajax({
-                url: 'http://localhost:8081/learn',
+                url: 'http://localhost:8081/pred',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({pixels}),
