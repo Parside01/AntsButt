@@ -16,15 +16,32 @@ canvas.addEventListener("click", (e) => {
 
 function drawcolony() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "black";
-  for (const city of colony) {
-    ctx.beginPath();
-    ctx.arc(city.x, city.y, 5, 0, Math.PI * 2);
-    ctx.fill();
+
+  for (let i = 0; i < colony.length; i++) {
+    const city = colony[i];
+
+    if (i === 0) {
+      ctx.beginPath();
+      ctx.arc(city.x, city.y, 7, 0, Math.PI * 2);
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(city.x, city.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffeb3b";
+      ctx.fill();
+    } else {
+
+      ctx.beginPath();
+      ctx.arc(city.x, city.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+    }
   }
 
   if (bestPath.length > 0) {
-    ctx.strokeStyle = "red";
+    ctx.strokeStyle = "#ffeb3b";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(colony[bestPath[0]].x, colony[bestPath[0]].y);
@@ -35,6 +52,8 @@ function drawcolony() {
     ctx.stroke();
   }
 }
+
+
 
 function distance(a, b) {
   const dx = colony[a].x - colony[b].x;

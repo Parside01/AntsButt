@@ -2,23 +2,86 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Кликабельная плоскость</title>
+    <title>Кластеры на плоскости</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; }
-        canvas { border: 1px solid black; cursor: crosshair; }
+        body {
+            background-color: #111;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            background-color: #111;
+            color: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 5px 10px;
+            width: 80px;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #ffeb3b;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #fdd835;
+        }
+
+        canvas {
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: #2e2e2e;
+            cursor: crosshair;
+        }
     </style>
 </head>
 <body>
-    <h2>Кликайте по плоскости, чтобы поставить точки</h2>
+    <div class="container">
+        <h2>Кликайте по плоскости, чтобы поставить точки</h2>
 
-    <label>Количество кластеров:</label>
-    <input type="number" id="clusters" min="1" value="2">
-    <button id="clusterBtn">Начать кластеризацию</button>
-    <button id="resetBtn">Сбросить</button>
+        <div style="margin-bottom: 10px;">
+            <label for="clusters">Кластеры:</label>
+            <input type="number" id="clusters" min="1" value="2">
+            <button id="clusterBtn">Найти</button>
+            <button id="resetBtn">Сбросить</button>
+        </div>
 
-    <br><br>
-    <canvas id="canvas" width="600" height="600"></canvas>
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
 
+    <!-- Подключаем k-means из внешнего файла -->
     <script src="claster.js"></script>
 
     <script>
@@ -37,7 +100,7 @@
             drawPoint(x, y);
         });
 
-        function drawPoint(x, y, color = "black") {
+        function drawPoint(x, y, color = "white") {
             ctx.beginPath();
             ctx.arc(x, y, 5, 0, Math.PI * 2);
             ctx.fillStyle = color;
