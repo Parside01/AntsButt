@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>GeneticAlgorithm</title>
+  <link rel="stylesheet" href="source/style1.css">
+</head>
+
+<body>
+  <nav>
+    <ul class="nav nav-tabs">
+      <li class="nav-item"><a class="nav-link" href="#">Главная</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">A*</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Кластеризация</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Генетический алгоритм</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Муравьиный алгоритм</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Дерево решений</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Нейросеть</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <div class="left-container">
+      <canvas id="myCanvas"></canvas>
+      <div id="coordinates"></div>
+    </div>
+    <div class="right-container">
+      <div class="scale-container">
+        <label>Масштаб:</label>
+        <input type="range" id="scaleSlider" min="5" max="500" value="5" step="1"
+          oninput="updateScaleValue(this.value)">
+        <span id="scaleValue">5</span>
+      </div>
+
+      <div class="input-row">
+        <div class="input-label">
+          <input type="text" id="coordinateInput" placeholder="введите координаты через пробел или запятую">
+        </div>
+        <button id="addPointButton">Добавить</button>
+      </div>
+      <div class="start-clear-container">
+        <button id="runButton">Запустить алгоритм</button>
+        <button id="clearButton">Очистить холст</button>
+      </div>
+      <div id="algorithmStatus">Запустите алгоритм</div>
+      <div id="generationInfo">Поколение: 0 | Приспособленность: 0</div>
+    </div>
+  </div>
+
+  <script src="js/genethicAlgorithm.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
