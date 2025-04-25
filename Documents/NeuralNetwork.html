@@ -6,18 +6,18 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Рисовалка</title>
-    <link rel="stylesheet" href="root.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
-
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
-
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="root.css">
 
     <style>
         li {
@@ -169,44 +169,57 @@
 
 </head>
 <body class="dark-theme">
-<ul class="course__list">
-    <li class="course__item course-card">
-        <div class="course-card__content">
-            <div class="course-card__info">
-                <h5>Рисовалка</h5>
+    <nav>
+        <ul class="nav nav-tabs">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Главная</a></li>
+          <li class="nav-item"><a class="nav-link" href="./AAlg.html">A*</a></li>
+          <li class="nav-item"><a class="nav-link" href="./Claster/index.html">Кластеризация</a></li>
+          <li class="nav-item"><a class="nav-link" href="./GeneticAlg/index.html">Генетический алгоритм</a></li>
+          <li class="nav-item"><a class="nav-link" href="./Ants/index.html">Муравьиный алгоритм</a></li>
+          <li class="nav-item"><a class="nav-link" href="./DecisionTree/index.html">Дерево решений</a></li>
+          <li class="nav-item"><a class="nav-link" href="./NeuralNetwork.html">Нейросеть</a></li>
+        </ul>
+    </nav>
+    <container class="dark-theme">
+        <ul class="course__list">
+            <li class="course__item course-card">
+                <div class="course-card__content">
+                    <div class="course-card__info">
+                        <h5>Рисовалка</h5>
+                    </div>
+                    <div class="course-card__card">
+                        <canvas id="canvas" width="480" height="480"></canvas>
+                    </div>
+                    <button id="sendButton" class="bttn bttn-prime">Иии крутить барабан</button>
+                </div>
+            </li>
+        </ul>
+        
+        <ul class="course__list state__card" style="width: 400px">
+            <li class="course__item course-card">
+                <h5 class="card-title state state--default">Этот мир в безопасности</h5>
+            </li>
+        </ul>
+        
+        <div class="modal fade" id="predictionModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="predictionModalLabel">Предсказание</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Умная машина предсказывает: <strong id="prediction"></strong></p>
+                        <p>Что скажешь?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="correctButton">Правильно</button>
+                        <button type="button" class="btn btn-secondary" id="incorrectButton">Неверно</button>
+                    </div>
+                </div>
             </div>
-            <div class="course-card__card">
-                <canvas id="canvas" width="480" height="480"></canvas>
-            </div>
-            <button id="sendButton" class="bttn bttn-prime">Иии крутить барабан</button>
         </div>
-    </li>
-</ul>
-
-<ul class="course__list state__card" style="width: 400px">
-    <li class="course__item course-card">
-        <h5 class="card-title state state--default">Этот мир в безопасности</h5>
-    </li>
-</ul>
-
-<div class="modal fade" id="predictionModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="predictionModalLabel">Предсказание</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Умная машина предсказывает: <strong id="prediction"></strong></p>
-                <p>Что скажешь?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="correctButton">Правильно</button>
-                <button type="button" class="btn btn-secondary" id="incorrectButton">Неверно</button>
-            </div>
-        </div>
-    </div>
-</div>
+    </container>
 
 <script>
     $(document).ready(function () {

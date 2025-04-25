@@ -22,30 +22,37 @@ body {
     background-color: var(--dark-background);
 }
 
-.nav-item {
-    flex-shrink: 0;
+nav {
+    background-color: #121212;
+    font-size: 12px;
 }
 
 .nav-tabs {
     border-bottom: 1px solid #212121;
     display: flex;
     list-style: none;
-    gap: 1%;
     height: 7vh;
     align-items: center;
-    padding: 0 1%;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    flex-shrink: 0;
 }
 
 .nav-link {
     white-space: nowrap;
     color: rgb(255, 240, 0);
-    text-decoration: none !important;
+    text-decoration: none;
     padding: 8px 16px;
     border-radius: 4px;
     transition: background 0.2s;
 }
 
 .nav-link:hover {
-    background:rgb(255, 240, 0);
+    background: rgb(255, 240, 0);
     color: #212121;
 }
+
+

@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="root.css">
     <style>
         :root {
             --dark-background: #121212;
@@ -34,6 +35,7 @@
         body {
             background-color: var(--dark-background);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -167,13 +169,25 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="controls">
-        <input value="" type="number" id="cell-count" class="form-control" placeholder="Размер"/>
-        <button id="find-path" class="bttn">Найти</button>
+    <nav>
+        <ul class="nav nav-tabs">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Главная</a></li>
+          <li class="nav-item"><a class="nav-link" href="./AAlg.html">A*</a></li>
+          <li class="nav-item"><a class="nav-link" href="./Claster/index.html">Кластеризация</a></li>
+          <li class="nav-item"><a class="nav-link" href="./GeneticAlg/index.html">Генетический алгоритм</a></li>
+          <li class="nav-item"><a class="nav-link" href="./Ants/index.html">Муравьиный алгоритм</a></li>
+          <li class="nav-item"><a class="nav-link" href="./DecisionTree/index.html">Дерево решений</a></li>
+          <li class="nav-item"><a class="nav-link" href="./NeuralNetwork.html">Нейросеть</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="controls">
+            <input value="" type="number" id="cell-count" class="form-control" placeholder="Размер"/>
+            <button id="find-path" class="bttn">Найти</button>
+        </div>
+        <div class="cells-wrapper"></div>
     </div>
-    <div class="cells-wrapper"></div>
-</div>
 
 
 <script>
