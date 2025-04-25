@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Underdog&display=swap');
+
+:root {
+    --dark-background: #121212;
+    --dark-card-background: #212121;
+    --text: #ffffff;
+    --dark-button-text: #212121;
+    --yellow-shadow: rgba(255, 235, 59, 0.2);
+    --yellow-button-background: #ffeb3b;
+}
+
+* {
+    font-family: "Underdog" !important;
+    color: var(--text);
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+    font-weight: 700 !important;
+}
+
+body {
+    background-color: var(--dark-background);
+}
+
+.nav-item {
+    flex-shrink: 0;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #212121;
+    display: flex;
+    list-style: none;
+    gap: 1%;
+    height: 7vh;
+    align-items: center;
+    padding: 0 1%;
+}
+
+.nav-link {
+    white-space: nowrap;
+    color: rgb(255, 240, 0);
+    text-decoration: none !important;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.nav-link:hover {
+    background:rgb(255, 240, 0);
+    color: #212121;
+}
