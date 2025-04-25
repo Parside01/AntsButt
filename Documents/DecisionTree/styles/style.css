@@ -296,7 +296,6 @@ nav {
     color: #212121;
 }
 
-/* Контейнер с учетом высоты навбара */
 .container {
     display: flex;
     height: calc(100vh - 7vh);
