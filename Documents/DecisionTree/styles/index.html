@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesicionTreeAlgorithm</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link" href="#">Главная</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">A*</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Кластеризация</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Генетический алгоритм</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Муравьиный алгоритм</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Дерево решений</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Нейросеть</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="left-panel">
+            <div class="tree-container">
+                <svg id="tree-svg"></svg>
+            </div>
+            <div id="nodeInfoContainer"></div>
+        </div>
+        <div class="right-panel">
+            <div class="data-input-container">
+                <textarea id="trainingData" rows="4" placeholder="Обучающие данные (CSV)" spellcheck="false"></textarea>
+            </div>
+            <div class="data-input-container">
+                <textarea id="testData" rows="2" placeholder="Тестовый пример (CSV)" spellcheck="false"></textarea>
+            </div>
+
+            <div class="result-row">
+                <div class="result-output">
+                    Ответ: <span id="predictionResult"></span>
+                </div>
+                <div class="button-container">
+                    <button id="trainTree">Обучить дерево</button>
+                    <button id="testTree">Тест</button>
+                </div>
+            </div>
+            <div class="navigation-and-optimize-row">
+                <div class="navigation-row">
+                    <button id="prevNode">Предыдущий узел</button>
+                    <button id="nextNode">Следующий узел</button>
+                </div>
+                <button id="optimizeTree">Оптимизировать размер дерева</button>
+            </div>
+            <div class="depth-control">
+                <div class="control-label">
+                    <label for="treeDepth">Глубина дерева:</label>
+                </div>
+                <input type="range" id="treeDepth" min="2" max="3" value="2">
+                <span id="depthValue">2</span>
+            </div>
+            <div class="task-type-control">
+                <div class="control-label">
+                    <label for="taskType">Тип задачи:</label>
+                </div>
+                <select id="taskType">
+                    <option value="regression">Регрессия</option>
+                    <option value="classification">Классификация</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/DecisionTree.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</body>
+
+</html>
