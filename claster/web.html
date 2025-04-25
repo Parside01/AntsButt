@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кластеры на плоскости</title>
+    <style>
+        body {
+            background-color: #111;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            background-color: #111;
+            color: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 5px 10px;
+            width: 80px;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #ffeb3b;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #fdd835;
+        }
+
+        canvas {
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: #2e2e2e;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Кликайте по плоскости, чтобы поставить точки</h2>
+
+        <div style="margin-bottom: 10px;">
+            <label for="clusters">Кластеры:</label>
+            <input type="number" id="clusters" min="1" value="2">
+            <button id="clusterBtn">Найти</button>
+            <button id="resetBtn">Сбросить</button>
+        </div>
+
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+    <script src="claster.js"></script>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let points = [];
+
+        const COLORS = ["red", "green", "blue", "orange", "purple", "cyan", "magenta", "yellow", "gray", "brown"];
+
+        canvas.addEventListener("click", function(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            points.push({x, y});
+            drawPoint(x, y);
+        });
+
+        function drawPoint(x, y, color = "white") {
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function prepareDataset(points) {
+            return points.map(p => [p.x, p.y]);
+        }
+
+        function drawClusters(clusters) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            clusters.forEach((cluster, i) => {
+                const color = COLORS[i % COLORS.length];
+                cluster.points.forEach(p => {
+                    drawPoint(p[0], p[1], color);
+                });
+
+                const [cx, cy] = cluster.centroid;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+                ctx.closePath();
+            });
+        }
+
+        document.getElementById("clusterBtn").addEventListener("click", function() {
+            const k = parseInt(document.getElementById("clusters").value);
+            if (points.length < k) {
+                alert("Слишком мало точек для такого количества кластеров.");
+                return;
+            }
+
+            const dataset = prepareDataset(points);
+            const result = kmeans(dataset, k, true);
+            drawClusters(result.clusters);
+        });
+
+        document.getElementById("resetBtn").addEventListener("click", function() {
+            points = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+    </script>
+</body>
+</html>
