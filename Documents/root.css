@@ -11,11 +11,10 @@
 
 * {
     font-family: "Underdog" !important;
-    color: var(--text);
+    /*color: var(--text);*/
 }
 
 *, ::after, ::before {
-    box-sizing: border-box;
     font-weight: 700 !important;
 }
 
