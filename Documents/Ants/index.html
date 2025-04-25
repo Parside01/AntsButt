@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <title>Муравьиный алгоритм</title>
@@ -14,6 +15,43 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+    }
+
+    .nav-item {
+      flex-shrink: 0;
+    }
+
+    .nav-tabs {
+      margin-top: 10px;
+      border-bottom: 1px solid #212121;
+      display: flex;
+      list-style: none;
+      gap: 1%;
+      height: 7vh;
+      align-items: center;
+      padding: 0 1%;
+      margin-bottom: 10px;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-link {
+      white-space: nowrap;
+      color: rgb(255, 240, 0);
+      text-decoration: none !important;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .nav-link:hover {
+      background: rgb(255, 240, 0);
+      color: #212121;
     }
 
     .container {
@@ -55,7 +93,19 @@
     }
   </style>
 </head>
+
 <body>
+  <nav>
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link" href="../../index.html">Главная</a></li>
+        <li class="nav-item"><a class="nav-link" href="../AAlg.html">A*</a></li>
+        <li class="nav-item"><a class="nav-link" href="../Claster/index.html">Кластеризация</a></li>
+        <li class="nav-item"><a class="nav-link" href="../GeneticAlg/index.html">Генетический алгоритм</a></li>
+        <li class="nav-item"><a class="nav-link" href="../Ants/index.html">Муравьиный алгоритм</a></li>
+        <li class="nav-item"><a class="nav-link" href="../DecisionTree/index.html">Дерево решений</a></li>
+        <li class="nav-item"><a class="nav-link" href="../NeuralNetwork.html">Нейросеть</a></li>
+    </ul>
+</nav>
   <div class="container">
     <h1>Задача коммивояжёра — Муравьиный алгоритм</h1>
     <canvas id="canvas" width="800" height="600"></canvas>
@@ -66,4 +116,5 @@
   </div>
   <script src="ants.js"></script>
 </body>
+
 </html>

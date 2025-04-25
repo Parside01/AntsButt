@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <title>Кластеры на плоскости</title>
@@ -66,9 +67,57 @@
             background-color: #2e2e2e;
             cursor: crosshair;
         }
+
+        .nav-item {
+            flex-shrink: 0;
+        }
+
+        .nav-tabs {
+            border-bottom: 1px solid #212121;
+            display: flex;
+            list-style: none;
+            gap: 1%;
+            height: 7vh;
+            align-items: center;
+            padding: 0 1%;
+            margin-bottom: 10px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-link {
+            white-space: nowrap;
+            color: rgb(255, 240, 0);
+            text-decoration: none !important;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .nav-link:hover {
+            background: rgb(255, 240, 0);
+            color: #212121;
+        }
     </style>
 </head>
+
 <body>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link" href="../../index.html">Главная</a></li>
+            <li class="nav-item"><a class="nav-link" href="../AAlg.html">A*</a></li>
+            <li class="nav-item"><a class="nav-link" href="../Claster/index.html">Кластеризация</a></li>
+            <li class="nav-item"><a class="nav-link" href="../GeneticAlg/index.html">Генетический алгоритм</a></li>
+            <li class="nav-item"><a class="nav-link" href="../Ants/index.html">Муравьиный алгоритм</a></li>
+            <li class="nav-item"><a class="nav-link" href="../DecisionTree/index.html">Дерево решений</a></li>
+            <li class="nav-item"><a class="nav-link" href="../NeuralNetwork.html">Нейросеть</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <h2>Кликайте по плоскости, чтобы поставить точки</h2>
 
@@ -89,12 +138,12 @@
 
         const COLORS = ["red", "green", "blue", "orange", "purple", "cyan", "magenta", "yellow", "gray", "brown"];
 
-        canvas.addEventListener("click", function(event) {
+        canvas.addEventListener("click", function (event) {
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
-            points.push({x, y});
+            points.push({ x, y });
             drawPoint(x, y);
         });
 
@@ -130,7 +179,7 @@
             });
         }
 
-        document.getElementById("clusterBtn").addEventListener("click", function() {
+        document.getElementById("clusterBtn").addEventListener("click", function () {
             const k = parseInt(document.getElementById("clusters").value);
             if (points.length < k) {
                 alert("Слишком мало точек для такого количества кластеров.");
@@ -142,10 +191,11 @@
             drawClusters(result.clusters);
         });
 
-        document.getElementById("resetBtn").addEventListener("click", function() {
+        document.getElementById("resetBtn").addEventListener("click", function () {
             points = [];
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         });
     </script>
 </body>
+
 </html>
