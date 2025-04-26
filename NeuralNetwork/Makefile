@@ -7,4 +7,8 @@ build-run:
 	go run third_party/go-cli/main.go
 run:
 	go run third_party/go-cli/main.go
+run-exe:
+	./cmd/main.exe
+
 default: build-run
+
